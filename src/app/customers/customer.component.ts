@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 // import { Customer } from './customer';
-import {FormBuilder, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
     selector: 'my-signup',
@@ -15,11 +15,11 @@ export class CustomerComponent implements OnInit {
 
     ngOnInit(): void {
         this.customerForm = this.fb.group({
-            firstName: '',
-            lastName: '',
+            firstName: ['', [Validators.required, Validators.minLength(3)]],
+            lastName: ['', [Validators.required, Validators.maxLength(50)]],
             // in case i need to diasable default
             // lastName: {value: 'Trajkovic', disabled: true},
-            email: '',
+            email: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
             sendCatalog: true
         });
     }

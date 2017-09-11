@@ -18,11 +18,11 @@ var CustomerComponent = (function () {
     }
     CustomerComponent.prototype.ngOnInit = function () {
         this.customerForm = this.fb.group({
-            firstName: '',
-            lastName: '',
+            firstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(3)]],
+            lastName: ['', [forms_1.Validators.required, forms_1.Validators.maxLength(50)]],
             // in case i need to diasable default
             // lastName: {value: 'Trajkovic', disabled: true},
-            email: '',
+            email: ['', [forms_1.Validators.required, forms_1.Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
             sendCatalog: true
         });
     };
