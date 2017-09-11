@@ -11,6 +11,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var core_1 = require("@angular/core");
 // import { Customer } from './customer';
 var forms_1 = require("@angular/forms");
+// My Custom Validator Functions
+function emailMatcher(c) {
+    var emailControl = c.get('email');
+    var confirmControl = c.get('confirmEmail');
+    if (emailControl.value === confirmControl.value) {
+        return null;
+    }
+    return { 'match': true };
+}
 function ratingRange(min, max) {
     return function (c) {
         if (c.value != undefined && (isNaN(c.value) || c.value < min || c.value > max)) {
@@ -28,9 +37,12 @@ var CustomerComponent = (function () {
         this.customerForm = this.fb.group({
             firstName: ['', [forms_1.Validators.required, forms_1.Validators.minLength(3)]],
             lastName: ['', [forms_1.Validators.required, forms_1.Validators.maxLength(50)]],
-            // in case i need to diasable default
-            // lastName: {value: 'Trajkovic', disabled: true},
-            email: ['', [forms_1.Validators.required, forms_1.Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
+            emailGroup: this.fb.group({
+                // in case i need to disable default
+                // lastName: {value: 'Trajkovic', disabled: true},
+                email: ['', [forms_1.Validators.required, forms_1.Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
+                confirmEmail: ['', forms_1.Validators.required],
+            }, { validator: emailMatcher }),
             phone: '',
             notification: 'email',
             rating: ['', ratingRange(1, 5)],
