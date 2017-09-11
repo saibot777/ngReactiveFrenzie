@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 // import { Customer } from './customer';
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, FormGroup} from "@angular/forms";
 
 @Component({
     selector: 'my-signup',
@@ -11,12 +11,25 @@ export class CustomerComponent implements OnInit {
     customerForm: FormGroup;
     // customer: Customer= new Customer();
 
+    constructor(private fb: FormBuilder) {}
+
     ngOnInit(): void {
-        this.customerForm = new FormGroup({
-            firstName: new FormControl(),
-            lastName: new FormControl(),
-            email: new FormControl(),
-            sendCatalog: new FormControl(true)
+        this.customerForm = this.fb.group({
+            firstName: '',
+            lastName: '',
+            // in case i need to diasable default
+            // lastName: {value: 'Trajkovic', disabled: true},
+            email: '',
+            sendCatalog: true
+        });
+    }
+
+    populateTestData(): void {
+        this.customerForm.patchValue({
+           firstName: 'Stefan',
+           lastName: 'Trajkovic',
+           email: 'stefanzoran@gmail.com',
+           sendCatalog: false
         });
     }
 
