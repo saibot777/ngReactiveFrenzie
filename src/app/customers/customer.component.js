@@ -52,7 +52,15 @@ var CustomerComponent = (function () {
             phone: '',
             notification: 'email',
             rating: ['', ratingRange(1, 5)],
-            sendCatalog: true
+            sendCatalog: true,
+            addresses: this.fb.group({
+                addressType: 'home',
+                street1: '',
+                street2: '',
+                city: '',
+                state: '',
+                zip: ''
+            })
         });
         this.customerForm.get('notification').valueChanges
             .subscribe(function (value) { return _this.setNotifications(value); });
