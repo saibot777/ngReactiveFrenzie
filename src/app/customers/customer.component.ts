@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 
 // import { Customer } from './customer';
 import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import 'rxjs/add/operator/debounceTime';
 
     // My Custom Validator Functions
     function emailMatcher(c: AbstractControl) {
@@ -28,7 +29,13 @@ import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "
 })
 export class CustomerComponent implements OnInit {
     customerForm: FormGroup;
+    emailMessage: string;
     // customer: Customer= new Customer();
+
+    private validationMessages = {
+      required: 'Please enter your email address.',
+      pattern: 'Please enter a valid email address.'
+    };
 
     constructor(private fb: FormBuilder) {}
 
@@ -50,6 +57,10 @@ export class CustomerComponent implements OnInit {
 
         this.customerForm.get('notification').valueChanges
             .subscribe(value => this.setNotifications(value));
+
+        const emailControl = this.customerForm.get('emailGroup.email');
+        emailControl.valueChanges.debounceTime(1000).subscribe(value =>
+            this.setMessage(emailControl));
     }
 
     populateTestData(): void {
@@ -64,6 +75,14 @@ export class CustomerComponent implements OnInit {
     save() {
         console.log(this.customerForm);
         console.log('Saved: ' + JSON.stringify(this.customerForm.value));
+    }
+
+    setMessage(c: AbstractControl): void {
+        this.emailMessage = '';
+        if ((c.touched || c.dirty || c.valid) && c.errors) {
+            this.emailMessage = Object.keys(c.errors).map(key =>
+                this.validationMessages[key]).join(' ');
+        }
     }
 
     setNotifications(notifyVia: string): void {
