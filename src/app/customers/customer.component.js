@@ -6,14 +6,23 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var core_1 = require("@angular/core");
-var customer_1 = require("./customer");
+// import { Customer } from './customer';
+var forms_1 = require("@angular/forms");
 var CustomerComponent = (function () {
     function CustomerComponent() {
-        this.customer = new customer_1.Customer();
     }
-    CustomerComponent.prototype.save = function (customerForm) {
-        console.log(customerForm.form);
-        console.log('Saved: ' + JSON.stringify(customerForm.value));
+    // customer: Customer= new Customer();
+    CustomerComponent.prototype.ngOnInit = function () {
+        this.customerForm = new forms_1.FormGroup({
+            firstName: new forms_1.FormControl(),
+            lastName: new forms_1.FormControl(),
+            email: new forms_1.FormControl(),
+            sendCatalog: new forms_1.FormControl(true)
+        });
+    };
+    CustomerComponent.prototype.save = function () {
+        console.log(this.customerForm);
+        console.log('Saved: ' + JSON.stringify(this.customerForm.value));
     };
     return CustomerComponent;
 }());
