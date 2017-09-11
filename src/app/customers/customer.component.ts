@@ -20,6 +20,8 @@ export class CustomerComponent implements OnInit {
             // in case i need to diasable default
             // lastName: {value: 'Trajkovic', disabled: true},
             email: ['', [Validators.required, Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
+            phone: '',
+            notification: 'email',
             sendCatalog: true
         });
     }
@@ -29,12 +31,22 @@ export class CustomerComponent implements OnInit {
            firstName: 'Stefan',
            lastName: 'Trajkovic',
            email: 'stefanzoran@gmail.com',
-           sendCatalog: false
+           sendCatalog: false,
         });
     }
 
     save() {
         console.log(this.customerForm);
         console.log('Saved: ' + JSON.stringify(this.customerForm.value));
+    }
+
+    setNotifications(notifyVia: string): void {
+        const phoneControl = this.customerForm.get('phone');
+        if (notifyVia === 'text') {
+            phoneControl.setValidators(Validators.required);
+        } else {
+            phoneControl.clearValidators();
+        }
+        phoneControl.updateValueAndValidity();
     }
  }

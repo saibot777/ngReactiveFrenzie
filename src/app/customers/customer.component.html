@@ -47,6 +47,9 @@
                             <span *ngIf="customerForm.get('lastName').errors.required">
                                 Please enter your last name.
                             </span>
+                            <span *ngIf="customerForm.get('lastName').errors.maxlength">
+                                The first name cannot be longer than 50 characters.
+                            </span>
                         </span>
                     </div>
                 </div>
@@ -85,6 +88,40 @@
                                    type="checkbox"
                                    formControlName="sendCatalog">
                             Send me your catalog
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group"
+                     [ngClass]="{ 'has-error': !customerForm.get('phone').valid }">
+                     <label class="col-md-2 control-label">Phone</label>
+
+                     <div class="col-md-8">
+                         <input type="tel"
+                                class="form-control"
+                                placeholder="Phone"
+                                formControlName="phone">
+                         <span class="help-block" *ngIf="customerForm.get('phone').errors">
+                             Please enter your phone number.
+                         </span>
+                     </div>
+
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">Send Notifications</label>
+                    <div class="col-md-8">
+                        <label class="radio-inline">
+                            <input type="radio"
+                                   value="email"
+                                   formControlName="notification"
+                                   (click)="setNotifications('email')">Email
+                        </label>
+                        <label class="radio-inline">
+                            <input type="radio"
+                                   value="text"
+                                   formControlName="notification"
+                                   (click)="setNotifications('text')">Text
                         </label>
                     </div>
                 </div>

@@ -23,6 +23,8 @@ var CustomerComponent = (function () {
             // in case i need to diasable default
             // lastName: {value: 'Trajkovic', disabled: true},
             email: ['', [forms_1.Validators.required, forms_1.Validators.pattern('[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+')]],
+            phone: '',
+            notification: 'email',
             sendCatalog: true
         });
     };
@@ -31,12 +33,22 @@ var CustomerComponent = (function () {
             firstName: 'Stefan',
             lastName: 'Trajkovic',
             email: 'stefanzoran@gmail.com',
-            sendCatalog: false
+            sendCatalog: false,
         });
     };
     CustomerComponent.prototype.save = function () {
         console.log(this.customerForm);
         console.log('Saved: ' + JSON.stringify(this.customerForm.value));
+    };
+    CustomerComponent.prototype.setNotifications = function (notifyVia) {
+        var phoneControl = this.customerForm.get('phone');
+        if (notifyVia === 'text') {
+            phoneControl.setValidators(forms_1.Validators.required);
+        }
+        else {
+            phoneControl.clearValidators();
+        }
+        phoneControl.updateValueAndValidity();
     };
     return CustomerComponent;
 }());
