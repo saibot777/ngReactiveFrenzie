@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 
 // import { Customer } from './customer';
-import {AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
+import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidatorFn, Validators} from "@angular/forms";
 import 'rxjs/add/operator/debounceTime';
 
     // My Custom Validator Functions
@@ -32,6 +32,10 @@ export class CustomerComponent implements OnInit {
     emailMessage: string;
     // customer: Customer= new Customer();
 
+    get addresses(): FormArray {
+        return <FormArray>this.customerForm.get('addresses');
+    }
+
     private validationMessages = {
       required: 'Please enter your email address.',
       pattern: 'Please enter a valid email address.'
@@ -53,14 +57,7 @@ export class CustomerComponent implements OnInit {
             notification: 'email',
             rating: ['', ratingRange(1, 5)],
             sendCatalog: true,
-            addresses: this.fb.group({
-                addressType: 'home',
-                street1: '',
-                street2: '',
-                city: '',
-                state: '',
-                zip: ''
-            })
+            addresses: this.fb.array([this.buildAddress()])
         });
 
         this.customerForm.get('notification').valueChanges
@@ -69,6 +66,21 @@ export class CustomerComponent implements OnInit {
         const emailControl = this.customerForm.get('emailGroup.email');
         emailControl.valueChanges.debounceTime(1000).subscribe(value =>
             this.setMessage(emailControl));
+    }
+
+    addAddress(): void {
+        this.addresses.push(this.buildAddress());
+    }
+
+    buildAddress(): FormGroup {
+        return this.fb.group({
+            addressType: 'home',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            zip: ''
+        });
     }
 
     populateTestData(): void {

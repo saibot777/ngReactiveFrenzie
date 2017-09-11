@@ -32,12 +32,19 @@ function ratingRange(min, max) {
 var CustomerComponent = (function () {
     function CustomerComponent(fb) {
         this.fb = fb;
-        // customer: Customer= new Customer();
         this.validationMessages = {
             required: 'Please enter your email address.',
             pattern: 'Please enter a valid email address.'
         };
     }
+    Object.defineProperty(CustomerComponent.prototype, "addresses", {
+        // customer: Customer= new Customer();
+        get: function () {
+            return this.customerForm.get('addresses');
+        },
+        enumerable: true,
+        configurable: true
+    });
     CustomerComponent.prototype.ngOnInit = function () {
         var _this = this;
         this.customerForm = this.fb.group({
@@ -53,20 +60,26 @@ var CustomerComponent = (function () {
             notification: 'email',
             rating: ['', ratingRange(1, 5)],
             sendCatalog: true,
-            addresses: this.fb.group({
-                addressType: 'home',
-                street1: '',
-                street2: '',
-                city: '',
-                state: '',
-                zip: ''
-            })
+            addresses: this.fb.array([this.buildAddress()])
         });
         this.customerForm.get('notification').valueChanges
             .subscribe(function (value) { return _this.setNotifications(value); });
         var emailControl = this.customerForm.get('emailGroup.email');
         emailControl.valueChanges.debounceTime(1000).subscribe(function (value) {
             return _this.setMessage(emailControl);
+        });
+    };
+    CustomerComponent.prototype.addAddress = function () {
+        this.addresses.push(this.buildAddress());
+    };
+    CustomerComponent.prototype.buildAddress = function () {
+        return this.fb.group({
+            addressType: 'home',
+            street1: '',
+            street2: '',
+            city: '',
+            state: '',
+            zip: ''
         });
     };
     CustomerComponent.prototype.populateTestData = function () {
